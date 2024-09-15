@@ -1,4 +1,6 @@
 const { Schema, model } = require("mongoose");
+// Import the formatDate function
+const formatDate = require('../utils/formatDate'); 
 
 // Define the schema for User
 const userSchema = new Schema(
@@ -29,6 +31,11 @@ const userSchema = new Schema(
         ref: "User",
       },
     ],
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: (timestamp) => formatDate(timestamp),
+    },
   },
   {
     toJSON: {

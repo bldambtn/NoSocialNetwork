@@ -1,11 +1,19 @@
 // Import required models
 const { Thought, User } = require("../models");
 
+// Import the formatDate utility
+const formatDate = require('../utils/formatDate'); 
+
 const thoughtController = {
   // Get all thoughts
   getThoughts(req, res) {
     Thought.find()
-      .then((thoughts) => res.json(thoughts))
+      .then((thoughts) => {
+        thoughts.forEach((thought) => {
+          thought.createdAt = formatDate(thought.createdAt);
+        });
+        res.json(thoughts);
+      })
       .catch((err) => res.status(500).json(err));
   },
 
@@ -32,11 +40,9 @@ const thoughtController = {
       })
       .then((user) =>
         !user
-          ? res
-              .status(404)
-              .json({
-                message: "Thought created, but found no user with that ID",
-              })
+          ? res.status(404).json({
+              message: "Thought created, but found no user with that ID",
+            })
           : res.json("Thought successfully created!")
       )
       .catch((err) => res.status(500).json(err));
