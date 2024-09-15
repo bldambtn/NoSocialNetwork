@@ -1,4 +1,6 @@
 const { Schema, model, Types } = require("mongoose");
+// Import the formatDate function
+const formatDate = require('../utils/formatDate'); 
 
 // Define the schema for Reaction
 const reactionSchema = new Schema({
@@ -8,17 +10,17 @@ const reactionSchema = new Schema({
   },
   reactionBody: {
     type: String,
-    required: true, 
-    maxLength: 280, 
+    required: true,
+    maxLength: 280,
   },
   username: {
     type: String,
-    required: true, 
+    required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now, 
-    get: (timestamp) => dateFormat(timestamp), 
+    default: Date.now,
+    get: (timestamp) => formatDate(timestamp),
   },
 });
 
@@ -35,7 +37,7 @@ const thoughtSchema = new Schema(
       // Set default timestamp to current time
       type: Date,
       default: Date.now,
-      get: (timestamp) => dateFormat(timestamp),
+      get: (timestamp) => formatDate(timestamp),
     },
     username: {
       type: String,
