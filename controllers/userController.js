@@ -50,6 +50,34 @@ const userController = {
       .then(() => res.json({ message: "User and their thoughts deleted!" }))
       .catch((err) => res.status(500).json(err));
   },
+  // Add Friend
+  addFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $addToSet: { friends: req.params.friendId } }, // Add friend to the friends array
+      { new: true } // Return the updated user
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user found with this ID" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
+  // Remove Friend
+  removeFriend(req, res) {
+    User.findOneAndUpdate(
+      { _id: req.params.userId },
+      { $pull: { friends: req.params.friendId } }, // Remove friend from friends array
+      { new: true }
+    )
+      .then((user) =>
+        !user
+          ? res.status(404).json({ message: "No user found with this ID" })
+          : res.json(user)
+      )
+      .catch((err) => res.status(500).json(err));
+  },
 };
 
 // Export userController 
